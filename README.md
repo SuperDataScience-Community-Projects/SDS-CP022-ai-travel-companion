@@ -35,40 +35,62 @@ This project involves creating an advanced AI-powered travel companion that leve
 - Python 3.8+
 - Required Libraries: pandas, langchain, transformers, gradio, openai, beautifulsoup4, selenium.
 
-## Workflow
+## Scope 1: (Beginner Friendly)
 
 ### Phase 1: Setup (1 Week)
 - Setup of GitHub repo and project folders
 - Setup of virtual environments and installation of libraries
 
-### Phase 2: Data Collection (1 Week)
-- Scrape airline ticket pricing data from multiple websites.
-- Preprocess and clean the data to ensure accuracy and consistency.
-- Store the ticket data in a csv or json.
+### Phase 2: Application Logic Development (2 Weeks)
+- Choose the LLM you want to use (Either a frontier model or a model from huggingface)
+- Integrate it with Tavily to enhance user queries with real-time data
+- Model output should be a complete itinerary for the users travel destinations
 
-### Phase 3: RAG Pipeline Development (1 Week)
-- Build a retrieval module using vector search.
-- Integrate a generative AI model (e.g., OpenAI GPT or Hugging Face LLMs) with the retrieval module.
-- Fine-tune the pipeline to answer user queries related to flight pricing and travel planning.
 
-### Phase 4: Application Development (1 Week)
-- Create an interactive Gradio or Streamlit interface to:
-  - Accept user queries about travel plans or preferences.
-  - Display ticket prices, travel suggestions, and other contextual insights.
-- Test the application for functionality, responsiveness, and user experience.
+### Phase 3: Application UI Development (1 Week)
+- Build a web UI to interact with the model (Streamlit, Gradio, etc.)
 
-### Phase 5: Deployment (1 Week)
-- Deploy the application on Hugging Face Spaces.
+### Phase 4: Deployment (1 Week)
+- Deploy application to the cloud (Streamlit, Gradio, etc.)
 
-## Timeline
+### Timeline
 
 | Phase          | Task                                 | Duration |
 |----------------|--------------------------------------|----------|
 | Phase 1: Setup  | Setup of GitHub Repo & environment | Week 1   |
-| Phase 2: Data  | Collect and store travel data | Week 2   |
-| Phase 3: RAG   | Build RAG pipeline                  | Week 3   |
-| Phase 4: App   | Build Gradio/Streamlit application   | Week 4   |
-| Phase 5: Deployment | Deploy on Hugging Face Spaces     | Week 5   |
+| Phase 2: Data  | Application Logic Dev | Week 2 & 3  |
+| Phase 3: RAG   | Application UI Dev                  | Week 4   |
+| Phase 4: Deployment | Deploy on Hugging Face Spaces     | Week 5   |
+
+## Scope 1: (Advaced)
+
+### Phase 1: Setup (1 Week)
+- Setup of GitHub repo and project folders
+- Setup of virtual environments and installation of libraries
+
+### Phase 2: Application Logic Development (2 Weeks)
+- What agents will we need?
+  - Grab flight data and summarize the best dates to book the cheapest tickets
+  - Grab 3 popular destinations for that country
+  - Grab weather results for each destination
+  - Optimize days to stay and travel time between each city
+  - Grab the best hotels to stay in for each city
+  - Summarize all details into a complete itinerary.
+
+### Phase 3: Application UI Development (1 Week)
+- Build a web UI to interact with the model (Streamlit, Gradio, etc.)
+
+### Phase 4: Deployment (1 Week)
+- Deploy application to the cloud (Streamlit, Gradio, etc.)
+
+### Timeline
+
+| Phase          | Task                                 | Duration |
+|----------------|--------------------------------------|----------|
+| Phase 1: Setup  | Setup of GitHub Repo & environment | Week 1   |
+| Phase 2: Data  | Application Logic Dev | Week 2 & 3  |
+| Phase 3: RAG   | Application UI Dev                  | Week 4   |
+| Phase 4: Deployment | Deploy on Hugging Face Spaces     | Week 5   |
 
 # Getting Started
 

@@ -2,18 +2,15 @@
 
 # search api
 tavily-python
-<<<<<<< HEAD
 load_dotenv
 graphviz
 pygraphviz
-pip install --upgrade pip setuptools wheel
 
-# web scrapping libraries
-=======
+# LLM apis
+openai
 
 # to load env files
 python-dotenv
 
 # langchain libraries
 langchain
->>>>>>> 2ee92b58ce5e1ad02dd17d706acaa68dec4ce147
