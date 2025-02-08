@@ -3,12 +3,9 @@
 # search api
 tavily-python
 load_dotenv
+amadeus
 
-# web scrapping libraries
-selenium
-requests
-
-# plotting libraries
+#For Langraph 
 graphviz
 pygraphviz
 
@@ -20,5 +17,5 @@ python-dotenv
 
 # langchain libraries
 langchain
-langchain_community
-wikipedia
+
+prompt-optimizer
