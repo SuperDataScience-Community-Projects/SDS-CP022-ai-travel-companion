@@ -1,0 +1,25 @@
+1 - San Miguel de Allende, Mexico
+2 - Udaipur, India
+3 - Kyoto, Japan
+4 - Hoi An, Vietnam
+5 - Chiang Mai, Thailand
+6 - Florence, Italy
+7 - Bangkok, Thailand
+8 - Tokyo, Japan
+9 - Ubud, Indonesia
+10 - Funchal, Portugal
+11 - Oaxaca, Mexico
+12 - San Sebastián, Spain
+13 - Marbella, Spain
+14 - Mexico City, Mexico
+15 - Marrakesh, Morocco
+16 - Istanbul, Turkey
+17 - Cape Town, South Africa
+18 - Porto, Portugal
+19 - Kolkata, India
+20 - Rome, Italy
+21 - Jaipur, India
+22 - Charleston, United States
+23 - Barcelona, Spain
+24 - Seoul, South Korea
+25 - Cuzco, Peru

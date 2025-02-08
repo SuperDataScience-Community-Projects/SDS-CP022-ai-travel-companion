@@ -3,6 +3,9 @@
 # search api
 tavily-python
 load_dotenv
+amadeus
+
+#For Langraph 
 graphviz
 pygraphviz
 
