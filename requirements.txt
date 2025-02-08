@@ -3,6 +3,12 @@
 # search api
 tavily-python
 load_dotenv
+
+# web scrapping libraries
+selenium
+requests
+
+# plotting libraries
 graphviz
 pygraphviz
 
@@ -14,3 +20,5 @@ python-dotenv
 
 # langchain libraries
 langchain
+langchain_community
+wikipedia

@@ -3,3 +3,8 @@
 .DS_Store
 .env
 .venv
+.txt
+notebooks/rajan-hans/throw-away-code/
+notebooks/rajan-hans/.streamlit
+__pycache__
+test.py
