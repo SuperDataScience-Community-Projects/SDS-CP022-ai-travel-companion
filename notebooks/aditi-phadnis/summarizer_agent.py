@@ -39,7 +39,7 @@ class SummarizerAgent:
     """.strip()
 
     def __init__(self, model="gpt-4o-mini", developer=summarizer_agent_prompt):
-        logging.info("\nSummarizer agent is initializing...\n")
+        logging.info("Summarizer agent is initializing...")
         self.model = model
         self.developer = developer
         self.client = OpenAI()
@@ -55,5 +55,5 @@ class SummarizerAgent:
             messages=messages
         )
         self.messages.append({"role": "assistant", "content": response.choices[0].message.content})
-        print("\nResponse of summarizer: \n", response.choices[0].message.content)
+        print("\nResponse of chat: \n", response.choices[0].message.content)
         return response.choices[0].message.content

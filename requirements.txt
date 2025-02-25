@@ -17,5 +17,5 @@ python-dotenv
 
 # langchain libraries
 langchain
-
-prompt-optimizer
+langchain_community
+wikipedia

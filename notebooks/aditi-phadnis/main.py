@@ -2,6 +2,8 @@ from planner_agent import PlannerAgent
 from tools import SearchWeb
 from dotenv import load_dotenv
 from datetime import datetime
+from summarizer_agent import SummarizerAgent
+
 
 
 import openai
@@ -13,13 +15,8 @@ load_dotenv()
 
 # OpenAI API Key
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-if not OPENAI_API_KEY:
-    raise ValueError("OPENAI_API_KEY not found.")
 
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
-
-if not TAVILY_API_KEY:
-    raise ValueError("TAVILY_API_KEY not found.")
 
 
 
@@ -52,63 +49,124 @@ def generate_itinerary(summary):
     return response.choices[0].message.content
 
 
-
-
-def query(max_turns=6):
-    """Generates travel itinerary using Tavily, Amadeus, and OpenAI."""
+# def query(max_turns=6):
+#     """Generates travel itinerary using Tavily, and OpenAI."""
     
-    # Initialize agents
+#     # Initialize agents
+#     planner = PlannerAgent()
+#     web_search = SearchWeb()
+#     summarizer = SummarizerAgent()
+
+
+#     # Define the user prompt
+#     prompt_template = """
+#     I want you to build an itinerary for a trip from {origin} to {destination} 
+#     starting from {start_month} {start_day} to {end_month} {end_day}.
+#     """
+    
+#     # Sample Inputs
+#     origin = 'Abu Dhabi'  # Abu Dhabi Airport Code
+#     destination = 'Tokyo'  # Narita Airport Code, Japan
+#     start_month = 'March'
+#     start_day = '1'
+#     end_month = 'March'
+#     end_day = '23'
+
+#     # Format prompt
+#     prompt = prompt_template.format(
+#         origin=origin,
+#         destination=destination,
+#         start_month=start_month,
+#         start_day=start_day,
+#         end_month=end_month,
+#         end_day=end_day,
+#     )
+
+
+
+#     i = 0
+#     next_prompt = prompt
+#     while i < max_turns:
+#         response = planner.plan(next_prompt)
+#         tool, details = grab_actions(response)
+#         next_prompt = response
+#         i += 1
+        # if tool:
+        #     if tool not in known_actions:
+        #         print(f"Unknown tool: {tool}")
+        #         break
+        #     print("--- running {} {} ---".format(tool, details))
+        #     action = known_actions[tool]()
+        #     search_resp = action.search(details)
+        #     print("--- summarizing results ---")
+        #     summary = summarizer.summarize(search_resp)
+        #     # print("--- Observation: {} ---".format(summary))
+        #     next_prompt = f"Observation: {summary}"
+        # else:
+        #     return response
+        
+# if __name__ == "__main__":
+#     query()
+
+def chat_loop():
+    """Runs the travel itinerary query in a loop for multiple user queries."""
+    
     planner = PlannerAgent()
     web_search = SearchWeb()
+    summarizer = SummarizerAgent()
 
-    # Define the user prompt
-    prompt_template = """
-    I want you to build an itinerary for a trip from {origin} to {destination} 
-    starting from {start_month} {start_day} to {end_month} {end_day}.
-    """
-    
-    # Sample Inputs
-    origin = 'AUH'  # Abu Dhabi Airport Code
-    destination = 'NRT'  # Narita Airport Code, Japan
-    start_month = 'March'
-    start_day = '1'
-    end_month = 'March'
-    end_day = '23'
-    year = '2025'  # Assuming the year
-    # Convert to date format
-    check_in = datetime.strptime(f"{start_day} {start_month} {year}", "%d %B %Y").strftime("%Y-%m-%d")
-    check_out = datetime.strptime(f"{end_day} {end_month} {year}", "%d %B %Y").strftime("%Y-%m-%d")
-
-
-
-    # Format prompt
-    prompt = prompt_template.format(
-        origin=origin,
-        destination=destination,
-        start_month=start_month,
-        start_day=start_day,
-        end_month=end_month,
-        end_day=end_day,
-        check_out=check_out,
-        check_in=check_in
+    while True:
+        print("\nEnter your trip details (or type 'exit' to quit):")
         
-    )
+        origin = input("Enter your departure city: ")
+        if origin.lower() == "exit":
+            print("Goodbye!")
+            break
+        
+        destination = input("Enter your destination: ")
+        start_month = input("Enter the start month: ")
+        start_day = input("Enter the start day: ")
+        end_month = input("Enter the end month: ")
+        end_day = input("Enter the end day: ")
 
-    # Step 1: Fetch Flight Data
-    flights = planner.get_flight_details(origin, destination, "2025-03-01", "2025-03-23")
-    
-    # Step 2: Fetch Hotel Data
-    hotels = planner.get_hotel_deals("TYO", "2025-03-01", "2025-03-23")  # Tokyo city code
+        prompt_template = """
+        I want you to build an itinerary for a trip from {origin} to {destination} 
+        starting from {start_month} {start_day} to {end_month} {end_day}.
+        """
+        
+        prompt = prompt_template.format(
+            origin=origin,
+            destination=destination,
+            start_month=start_month,
+            start_day=start_day,
+            end_month=end_month,
+            end_day=end_day,
+        )
 
-    # Step 3: Perform Web Search (Tavily)
-    web_info = web_search.search(f"Things to do in {destination} during {start_month}")
+        i = 0
+        next_prompt = prompt
+        final_response = None  
 
-    # Step 4: Generate Final Itinerary using OpenAI
-    itinerary_summary = f"Flights: {flights}\nHotels: {hotels}\nTravel Tips: {web_info}"
-    itinerary = generate_itinerary(itinerary_summary)
+        while i < 6:  # Limit turns to avoid infinite loops
+            response = planner.plan(next_prompt)
+            tool, details = grab_actions(response)
+            next_prompt = response
+            i += 1
 
-    print("\n=== FINAL ITINERARY ===\n")
-    print(itinerary)
+            if tool:
+                if tool not in known_actions:
+                    print(f"Unknown tool: {tool}")
+                    break
+                print("--- running {} {} ---".format(tool, details))
+                action = known_actions[tool]()
+                search_resp = action.search(details)
+                print("--- summarizing results ---")
+                summary = summarizer.summarize(search_resp)
+                # print("--- Observation: {} ---".format(summary))
+                next_prompt = f"Observation: {summary}"
+            else:
+                return response
+
 
 if __name__ == "__main__":
-    query()
+    chat_loop()

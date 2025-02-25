@@ -21,23 +21,10 @@ logging.basicConfig(
 )
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-if not OPENAI_API_KEY:
-    raise ValueError("OPENAI_API_KEY not found.")
 
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
-if not TAVILY_API_KEY:
-    raise ValueError("TAVILY_API_KEY not found.")
 
-AMADEUS_API_KEY = os.getenv("AMADEUS_API_KEY")
-
-if not AMADEUS_API_KEY:
-    raise ValueError("AMADEUS_API_KEY not found.")
-
-AMADEUS_API_SECRET = os.getenv("AMADEUS_API_SECRET")
-
-if not AMADEUS_API_SECRET:
-    raise ValueError("AMADEUS_API_SECRET not found.")
 
 # Sample Inputs
 origin = 'AUH'  # Abu Dhabi Airport Code
@@ -48,8 +35,6 @@ end_month = 'March'
 end_day = '23'
 year = '2025'  # Assuming the year
 # Convert to date format
-check_in = datetime.strptime(f"{start_day} {start_month} {year}", "%d %B %Y").strftime("%Y-%m-%d")
-check_out = datetime.strptime(f"{end_day} {end_month} {year}", "%d %B %Y").strftime("%Y-%m-%d")
 
 
 class PlannerAgent:
@@ -58,13 +43,18 @@ class PlannerAgent:
     You are an expert vacation planner and your role is to plan a fun and engaging itenerary for users for their
     chosen travel destination. You are to pick the top 3 locations of the destination the user tells you they
     want to visit. You are to also provide the best hotel deals for the user for the destination they are travelling to
-    and the best available flight tickets.
+    and the best available flight tickets. Do not assume your own location. Get the details only from the location user has entered.
 
     You run in a loop of Thought, Action, PAUSE, Observation.
     At the end of the loop you output an Answer
     Use Thought to describe your thoughts about the question you have been asked.
     Use Action to run one of the actions available to you - then return PAUSE.
     Observation will be the result of running those actions.
+
+    Action: Ask the user-What are the activities he is ineterested in hiking, spiritual, cultural, shopping, food, etc.
+    Thought: I should use web_search to look up the web for activities as per user's interest. 
+    Action: web_search: Activities as per user's interest in all the top 3 cities of Japan.
+
 
     Your available actions are:
 
@@ -127,7 +117,7 @@ class PlannerAgent:
 
     Observation: The best hotel deals for Osaka can be found on booking.com for the price of 1,000 AED for a 3 star hotel.
 
-    You will then output in markdown format:
+    You will then output in markdown format :
 
     Answer:
     ITINERARY:
@@ -192,7 +182,8 @@ class PlannerAgent:
     ### **Additional Notes:**  
     - Local Transportation: JR Pass recommended for intercity travel.  
     - Best Time to Visit: Spring (March-May) or Fall (September-November).  
-    - Budget Considerations: Estimated $100-$200 per day per person.  
+    - Budget Considerations: Estimated $100-$200 per day per person.
+
     """.strip()
 
 
@@ -217,39 +208,6 @@ class PlannerAgent:
         print("\nResponse of chat: \n", response.choices[0].message.content)
         return response.choices[0].message.content
     
-    def get_flight_details(self, origin, destination, start_date, end_date):
-        amadeus = Client(
-            client_id= AMADEUS_API_KEY,
-            client_secret=AMADEUS_API_SECRET
-        )
-        try:
-            response = amadeus.shopping.flight_offers_search.get(
-                originLocationCode=origin,
-                destinationLocationCode=destination,
-                departureDate=start_date,
-                returnDate=end_date
-            )
-            return response.data
-        except ResponseError as error:
-            logging.error(error)
-            return None
-        
-    def get_hotel_deals(self, city, start_date, end_date):
-        amadeus = Client(
-            client_id=AMADEUS_API_KEY,
-            client_secret= AMADEUS_API_SECRET
-        )
-        try:
-            response = amadeus.reference_data.locations.hotels.by_city.get(
-                cityCode=city,
-                checkInDate=check_in,
-                checkOutDate=check_out,
-                adults=1
-   
-            )
-            return response.data
-        except ResponseError as error:
-            return {"error": str(error)}
         
     def search_web(self, query):
         """Searches web for itinerary using Tavily Web Search."""
@@ -260,9 +218,6 @@ class PlannerAgent:
             logging.error(f"Tavily API error: {e}")
             return {"error": "Could not retrieve search results."}
 
-print("AMADEUS_API_KEY:", os.getenv("AMADEUS_API_KEY"))
-print("AMADEUS_API_SECRET:", os.getenv("AMADEUS_API_SECRET"))
-       
     
 
 

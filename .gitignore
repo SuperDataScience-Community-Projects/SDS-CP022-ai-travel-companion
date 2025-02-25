@@ -7,4 +7,6 @@
 notebooks/rajan-hans/throw-away-code/
 notebooks/rajan-hans/.streamlit
 __pycache__
-test.py
+test.py 
+.venvforaitravel/
+notebooks/aditi-phadnis/requirements.txt

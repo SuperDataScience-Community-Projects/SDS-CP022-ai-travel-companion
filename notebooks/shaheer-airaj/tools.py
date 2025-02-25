@@ -26,7 +26,7 @@ class SearchWeb:
     ]
 
     def __init__(self):
-        logging.info("Web search tool is being called...")
+        logging.info("\nWeb search tool is being called...\n")
         self.client = TavilyClient(TAVILY_API_KEY)
 
     def search(self, search_input, include_domains=DOMAINS):

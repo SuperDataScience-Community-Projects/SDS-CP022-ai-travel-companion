@@ -155,7 +155,7 @@ class PlannerAgent:
     """.strip()
 
     def __init__(self, model="gpt-4o", developer=planner_agent_prompt):
-        logging.info("Planner agent is initializing...")
+        logging.info("\nPlanner agent is initializing...\n")
         self.model = model
         self.developer = developer
         self.client = OpenAI()
@@ -171,5 +171,5 @@ class PlannerAgent:
             messages=messages
         )
         self.messages.append({"role": "assistant", "content": response.choices[0].message.content})
-        print("\nResponse of chat: \n", response.choices[0].message.content)
+        print("\nResponse of planner: \n", response.choices[0].message.content)
         return response.choices[0].message.content
