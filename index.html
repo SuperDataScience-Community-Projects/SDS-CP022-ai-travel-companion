@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sugestões de Viagem</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            height: 100vh;
+        }
+        .slideshow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-size: cover;
+            background-position: center;
+            {% if imagem_fundo %}
+            background-image: url('{{ imagem_fundo }}');
+            {% endif %}
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 20px auto;
+            position: relative;
+            z-index: 1;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+        textarea, input[type="text"], input[type="date"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .loading img {
+            width: 50px;
+            height: 50px;
+        }
+
+        /* Media Queries for Mobile */
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            textarea, input[type="text"], input[type="date"] {
+                font-size: 14px;
+            }
+            input[type="submit"] {
+                padding: 10px;
+                font-size: 14px;
+            }
+            .loading img {
+                width: 30px;
+                height: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slideshow de fundo -->
+    <div class="slideshow"></div>
+
+    <div class="container">
+        <h1>Sugestões de Viagem</h1>
+        
+        <!-- Exibir mensagem de erro, se houver -->
+        {% if error %}
+            <div class="error-message">{{ error }}</div>
+        {% endif %}
+
+        <form action="/" method="post" onsubmit="showLoading()">
+            <label for="preferences">Digite suas preferências de viagem: </label>
+            <label for="preferences">Exemplo: "Quero conhecer cidades medievais pela Europa, com clima ameno e boa gastronomia"</label>
+            <textarea id="preferences" name="preferences" rows="4" required>{{ request.form.preferences if request.form.preferences }}</textarea>
+            
+            <label for="origin">Cidade de Origem:</label>
+            <input type="text" id="origin" name="origin" required value="{{ request.form.origin if request.form.origin }}">
+            
+            <label for="date">Data de Partida (AAAA-MM-DD) <em>(Opcional)</em>:</label>
+            <input type="date" id="date" name="date" value="{{ request.form.date if request.form.date }}">
+            
+            <input type="submit" value="Obter Sugestões">
+        </form>
+        <div class="loading" id="loading">
+            <img src="https://i.gifer.com/ZZ5H.gif" alt="Carregando...">
+            <p>Processando sua solicitação...</p>
+        </div>
+    </div>
+
+    <script>
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

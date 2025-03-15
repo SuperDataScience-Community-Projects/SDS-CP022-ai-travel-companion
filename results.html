@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados da Busca</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            height: 100vh; /* Garante que o body ocupe toda a altura da tela */
+        }
+        .slideshow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-size: cover;
+            background-position: center;
+            animation: slideshow 20s infinite;
+        }
+        @keyframes slideshow {
+            0%, 100% { opacity: 0; }
+            10%, 90% { opacity: 1; }
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 20px auto;
+            position: relative;
+            z-index: 1;
+            overflow-y: auto; /* Permite rolagem dentro do container */
+            max-height: 90vh; /* Limita a altura do container */
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        .suggestions {
+            margin-bottom: 30px;
+        }
+        .suggestions h2 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        .suggestions p {
+            white-space: pre-line;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .divider {
+            border-top: 2px solid #4CAF50;
+            margin: 20px 0;
+        }
+        .options-title {
+            color: #4CAF50;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        .result {
+            margin-bottom: 30px;
+        }
+        .result h2 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        .hotels, .flights {
+            margin-top: 20px;
+        }
+        .hotels h3, .flights h3 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        .hotels ul, .flights ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .hotels li, .flights li {
+            background: #f9f9f9;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .no-results {
+            color: #888;
+            font-style: italic;
+        }
+        .back-button {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-button a {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .back-button a:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <!-- Slideshow de fundo -->
+    <div class="slideshow" id="slideshow"></div>
+
+    <div class="container">
+        <h1>Resultados da Busca</h1>
+        
+        <!-- Exibir sugestões de viagem -->
+        <div class="suggestions">
+            <h2>Sugestões de Viagem:</h2>
+            <p>{{ suggestions }}</p>
+        </div>
+
+        <!-- Divisão gráfica -->
+        <div class="divider"></div>
+
+        <!-- Título da seção de hotéis e voos -->
+        <div class="options-title">Opções de Hotéis e Voos</div>
+
+        <!-- Exibir resultados de hotéis e voos -->
+        <div class="results">
+            {% for result in results %}
+                <div class="result">
+                    <h2>{{ result.city }} ({{ result.iata }})</h2>
+                    
+                    <!-- Exibir hotéis -->
+                    <div class="hotels">
+                        <h3>Hotéis:</h3>
+                        {% if result.hotels and result.hotels != "Nenhum hotel encontrado." %}
+                            <p>Estes são hotéis com as tarifas mais baixas em {{ result.city }}:</p>
+                            <ul>
+                                {% for hotel in result.hotels %}
+                                    <li>
+                                        <strong>Nome:</strong> {{ hotel.nome }}<br>
+                                        <strong>Endereço:</strong> {{ hotel.endereco }}, {{ hotel.cidade }}, {{ hotel.estado }}, {{ hotel.pais }}<br>
+                                        <strong>Preço:</strong> {{ hotel.preco }} USD<br>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="no-results">Nenhum hotel encontrado.</p>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Exibir voos -->
+                    <div class="flights">
+                        <h3>Voos:</h3>
+                        {% if result.flights and result.flights != "Nenhum voo encontrado." %}
+                            <ul>
+                                {% for flight in result.flights %}
+                                    <li>
+                                        <strong>Companhia Aérea:</strong> {{ flight.airline }}<br>
+                                        <strong>Número do Voo:</strong> {{ flight.flightNumber }}<br>
+                                        <strong>Origem:</strong> {{ flight.origin }}<br>
+                                        <strong>Destino:</strong> {{ flight.destination }}<br>
+                                        <strong>Partida:</strong> {{ flight.departureTime }}<br>
+                                        <strong>Chegada:</strong> {{ flight.arrivalTime }}<br>
+                                        <strong>Preço:</strong> {{ flight.price }} {{ flight.currency }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="no-results">Nenhum voo encontrado.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Botão para voltar ao menu principal -->
+        <div class="back-button">
+            <a href="/">Voltar para o Menu Principal</a>
+        </div>
+    </div>
+
+    <script>
+        // Dados das imagens passados pelo Flask
+        const imagens = {{ imagens | tojson if imagens else {} }};
+        console.log("Dados das imagens:", imagens);  // Depuração
+
+        // Função para criar o slideshow
+        function criarSlideshow() {
+            const slideshow = document.getElementById("slideshow");
+            const todasImagens = Object.values(imagens).flat();
+            console.log("Todas as imagens:", todasImagens);  // Depuração
+
+            if (todasImagens.length === 0) {
+                console.log("Nenhuma imagem encontrada.");
+                return;
+            }
+
+            let index = 0;
+            setInterval(() => {
+                if (index >= todasImagens.length) index = 0;
+                slideshow.style.backgroundImage = `url('${todasImagens[index]}')`;
+                index++;
+            }, 5000); // Troca de imagem a cada 5 segundos
+        }
+
+        // Iniciar o slideshow
+        criarSlideshow();
+    </script>
+</body>
+</html>
