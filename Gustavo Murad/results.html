@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados da Busca</title>
+    <style>
+        /* ... (your existing styles) ... */
+        .map-container {
+            width: 400px; 
+            height: 300px; 
+            margin-bottom: 20px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="slideshow"></div>  <!-- Div for background slideshow -->
+    <div class="container">
+        <h1>Resultados da sua busca:</h1>
+        <div class="suggestions">
+            <h2>Sugestões:</h2>
+            <ol>  <!-- Use an ordered list for numbered suggestions -->
+                {% for suggestion in suggestions.split('. ') %} 
+                    {% if suggestion %}  <!-- Check if the suggestion is not empty -->
+                        <li><p>{{ suggestion.strip() }}</p></li>  <!-- Wrap in paragraph and list item -->
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </div>
+
+        {% for result in results %}
+            <h2>{{ result.city }}, {{ result.iata }}</h2>
+
+            <h3>Hotéis:</h3>
+            {% if result.hotels %}
+                <ul>
+                    {% set loop.index0 = loop.index0 %}  <!-- Store the outer loop index -->
+                    {% set loop.index = 0 %}  <!-- Manually reset the inner loop index -->
+                    {% for hotel in result.hotels %}
+                        {% set loop.index = loop.index + 1 %}  <!-- Increment index -->
+                        <li>
+                            <strong>Nome:</strong> {{ hotel.nome }}<br>
+                            <strong>Endereço:</strong> {{ hotel.endereco }}<br>
+                            <strong>Preço:</strong> {{ hotel.preco }} USD<br>
+
+                            <!-- Google Maps container -->
+                            <div id="map-{{ loop.index0 }}-{{ loop.index }}" class="map-container"></div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Nenhum hotel encontrado.</p>
+            {% endif %}
+
+            <!-- Display Flights (if available) -->
+            <h3>Voos:</h3>
+            {% if result.flights %}
+                <ul>
+                    {% for flight in result.flights %}
+                        <li>
+                            <strong>Companhia Aérea:</strong> {{ flight.airline }}<br>
+                            <strong>Número do Voo:</strong> {{ flight.flightNumber }}<br>
+                            <strong>Origem:</strong> {{ flight.origin }}<br>
+                            <strong>Destino:</strong> {{ flight.destination }}<br>
+                            <strong>Horário de Partida:</strong> {{ flight.departureTime }}<br>
+                            <strong>Horário de Chegada:</strong> {{ flight.arrivalTime }}<br>
+                            <strong>Preço:</strong> {{ flight.price }} {{ flight.currency }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Nenhum voo encontrado.</p>
+            {% endif %}
+        {% endfor %}  <!-- This closing tag was missing -->
+
+    </div>
+
+    <script>
+        function initMap() {
+            {% for result in results %}
+                {% set loop.index0 = loop.index0 %}  <!-- Store the outer loop index -->
+                {% set loop.index = 0 %}  <!-- Manually reset the inner loop index -->
+                {% for hotel in result.hotels %}
+                    {% set loop.index = loop.index + 1 %}  <!-- Increment index -->
+                    if ({{ hotel.latitude }} && {{ hotel.longitude }}) {
+                        const hotelLocation = { lat: {{ hotel.latitude }}, lng: {{ hotel.longitude }} };
+                        const map = new google.maps.Map(document.getElementById("map-{{ loop.index0 }}-{{ loop.index }}"), {
+                            zoom: 15,
+                            center: hotelLocation,
+                        });
+                        new google.maps.marker.AdvancedMarkerElement({
+                            map: map,
+                            position: hotelLocation,
+                        });
+                    } else {
+                        console.warn("Invalid latitude/longitude for hotel: {{ hotel.nome }}");
+                    }
+                {% endfor %}
+            {% endfor %}
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7zejwh6kOWyMKxtBg5zjOUS8u_IUH-dY&callback=initMap" async defer></script> 
+</body>
+</html>
