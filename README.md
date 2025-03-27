@@ -1,3 +1,4 @@
+# General Project Overview
 # Welcome to the SuperDataScience Community Project!
 Welcome to the AI Travel Companion repository! 🎉
 
@@ -35,108 +36,21 @@ This project involves creating an advanced AI-powered travel companion that leve
 - Python 3.8+
 - Required Libraries: pandas, langchain, transformers, gradio, openai, beautifulsoup4, selenium.
 
-## Scope 1: (Beginner Friendly)
+# Specific content for Gustavo Murad project
 
-### Phase 1: Setup (1 Week)
-- Setup of GitHub repo and project folders
-- Setup of virtual environments and installation of libraries
+## Solution Overview
+- This is a prototype of a travel assistant model
+- It takes inputs form a user who types a free text with his/her travel wishes
+- The UI is a basic HTML interface, and comunicates with the Flask LLM model running in Python
+- The whole project was executed for google colab using T4GPU given the demanding processing on LLM Mystral
+- The model generate travel alternatiecs based on user inputs
+- following the travel proposals, the model goes to Amadeus APIs to gather hotel and flight information
+- Google maps API also used to help with getting hotel address using coordinates present in Amadeus database
 
-### Phase 2: Application Logic Development (2 Weeks)
-- Choose the LLM you want to use (Either a frontier model or a model from huggingface)
-- Integrate it with Tavily to enhance user queries with real-time data
-- Model output should be a complete itinerary for the users travel destinations
+## Packages, Files used
 
-
-### Phase 3: Application UI Development (1 Week)
-- Build a web UI to interact with the model (Streamlit, Gradio, etc.)
-
-### Phase 4: Deployment (1 Week)
-- Deploy application to the cloud (Streamlit, Gradio, etc.)
-
-### Timeline
-
-| Phase          | Task                                 | Duration |
-|----------------|--------------------------------------|----------|
-| Phase 1: Setup  | Setup of GitHub Repo & environment | Week 1   |
-| Phase 2: Data  | Application Logic Dev | Week 2 & 3  |
-| Phase 3: RAG   | Application UI Dev                  | Week 4   |
-| Phase 4: Deployment | Deploy on Hugging Face Spaces     | Week 5   |
-
-## Scope 1: (Advaced)
-
-### Phase 1: Setup (1 Week)
-- Setup of GitHub repo and project folders
-- Setup of virtual environments and installation of libraries
-
-### Phase 2: Application Logic Development (2 Weeks)
-- What agents will we need?
-  - Grab flight data and summarize the best dates to book the cheapest tickets
-  - Grab 3 popular destinations for that country
-  - Grab weather results for each destination
-  - Optimize days to stay and travel time between each city
-  - Grab the best hotels to stay in for each city
-  - Summarize all details into a complete itinerary.
-
-### Phase 3: Application UI Development (1 Week)
-- Build a web UI to interact with the model (Streamlit, Gradio, etc.)
-
-### Phase 4: Deployment (1 Week)
-- Deploy application to the cloud (Streamlit, Gradio, etc.)
-
-### Timeline
-
-| Phase          | Task                                 | Duration |
-|----------------|--------------------------------------|----------|
-| Phase 1: Setup  | Setup of GitHub Repo & environment | Week 1   |
-| Phase 2: Data  | Application Logic Dev | Week 2 & 3  |
-| Phase 3: RAG   | Application UI Dev                  | Week 4   |
-| Phase 4: Deployment | Deploy on Hugging Face Spaces     | Week 5   |
-
-# Getting Started
-
-Follow these steps to set up the project locally:
-
-## 1. Fork the Repository
-To work on your own copy of this project:
-1. Navigate to the SDS GitHub repository for this project.  
-2. Click the **Fork** button in the top-right corner of the repository page.  
-3. This will create a copy of the repository under your GitHub account.
-
----
-
-## 2. Clone the Repository
-After forking the repository:
-1. Open a terminal on your local machine.  
-2. Clone your forked repository by running:
-   ```bash
-   git clone https://github.com/<your-username>/<repository-name>.git
-   ```
-3. Navigate to the project directory:
-    ```bash
-    cd <repository-name>
-    ```
-
-## 3. Create a virtual environment
-Setup a virtual environment to isolate project dependancies
-1. Run the following command in the terminal to create a virtual environment
-    ```bash
-    python3 -m venv .venv
-    ```
-2. Activate the virtual environment
-  - On a mac/linux:
-    ```bash
-    source .venv/bin/activate
-    ```
-  - On a windows:
-    ```
-    .venv\Scripts\activate
-    ```
-3. Verify the virtual environment is active (the shell prompt should show (.venv))
-
-## 4. Install dependancies
-Install the required libraries for the project
-1. Run the following command in the terminal to isntall dependancies from the requirements.txt file:
-    ```bash
-    pip install -r requirements.txt
-    ```
-Once the setup is complete, you can proceed with building your project
+- Transformers, Hugging face, flask, ngrok, Amadeus, Google
+- CSV , JSON files to help with city/IATA data cleaning
+- Index HTL: user input
+- Results.HTML: present results on model processing
+- Selecionar_Cidade.HTML : UI to handle origin city if first insertion in INdex.HTML not gets through
